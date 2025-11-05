@@ -13,6 +13,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/zerpto/ponodo/contracts"
 )
 
