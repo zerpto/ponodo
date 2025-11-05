@@ -1,9 +1,12 @@
 package contracts
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/zerpto/ponodo/config"
 	"gorm.io/gorm"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+
+	"github.com/zerpto/ponodo/config"
 )
 
 type AppContract interface {
