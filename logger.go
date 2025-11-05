@@ -1,4 +1,4 @@
-package core
+package ponodo
 
 import "github.com/rs/zerolog"
 
