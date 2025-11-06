@@ -10,6 +10,8 @@ type DbConfigContract interface {
 
 type ConfigContract interface {
 	GetApp() string
+	GetEnv() string
+	GetDebug() bool
 
 	GetDb() DbConfigContract
 }

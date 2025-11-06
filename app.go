@@ -23,8 +23,7 @@ type App struct {
 }
 
 func (app *App) SetConfigLoader(loader *config.Loader) {
-	//TODO implement me
-	panic("implement me")
+	app.ConfigLoader = loader
 }
 
 func (app *App) SetValidator(validate *validator.Validate) {

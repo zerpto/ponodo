@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/zerpto/ponodo"
-	"github.com/zerpto/ponodo/cli"
+	clicontracts "github.com/zerpto/ponodo/cli/contracts"
+	"github.com/zerpto/ponodo/contracts"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -19,8 +19,8 @@ import (
 )
 
 type HttpHandler struct {
-	App           ponodo.AppContract
-	RouterSetupFn func(ponodo.AppContract)
+	App           contracts.AppContract
+	RouterSetupFn func(contracts.AppContract)
 }
 
 func (h *HttpHandler) Short() string {
@@ -41,7 +41,7 @@ func (h *HttpHandler) Run(cmd *cobra.Command, args []string) {
 
 	// Set Gin
 	cfg := h.App.GetConfigLoader().Config
-	if cfg.Debug {
+	if cfg.GetDebug() {
 		gin.SetMode(gin.DebugMode)
 	} else {
 		gin.SetMode(gin.ReleaseMode)
@@ -93,7 +93,7 @@ func (h *HttpHandler) Use() string {
 	return "http"
 }
 
-func NewHttpHandler(app ponodo.AppContract, routerSetupFn func(ponodo.AppContract)) cli.CommandContract {
+func NewHttpHandler(app contracts.AppContract, routerSetupFn func(contracts.AppContract)) clicontracts.CommandContract {
 	return &HttpHandler{
 		App:           app,
 		RouterSetupFn: routerSetupFn,
