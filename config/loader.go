@@ -1,14 +1,14 @@
 package config
 
 import (
-	"fmt"
+	"github.com/zerpto/ponodo/config/contracts"
 	"strings"
 
 	"github.com/spf13/viper"
 )
 
 type Loader struct {
-	Config *Config
+	Config contracts.ConfigContract
 }
 
 func (c *Loader) loadFromEnvironmentVariable() error {
@@ -24,18 +24,18 @@ func (c *Loader) loadFromEnvironmentVariable() error {
 	return nil
 }
 
-func (c *Loader) BindTo(config *Config) error {
-	c.Config = config
-
-	if err := viper.Unmarshal(c.Config); err != nil {
-		return fmt.Errorf("failed to unmarshal config: %v", err)
-	}
-
-	if err := viper.Unmarshal(&c.Config.DB); err != nil {
-		return fmt.Errorf("failed to unmarshal DB: %v", err)
-	}
-	return nil
-}
+//func (c *Loader) BindTo(config contracts.ConfigContract) error {
+//	c.Config = config
+//
+//	if err := viper.Unmarshal(c.Config); err != nil {
+//		return fmt.Errorf("failed to unmarshal config: %v", err)
+//	}
+//
+//	if err := viper.Unmarshal(&c.Config.DB); err != nil {
+//		return fmt.Errorf("failed to unmarshal DB: %v", err)
+//	}
+//	return nil
+//}
 
 func NewLoader() (*Loader, error) {
 	loader := Loader{}

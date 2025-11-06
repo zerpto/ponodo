@@ -2,11 +2,11 @@ package cli
 
 import (
 	"fmt"
+	clicontracts "github.com/zerpto/ponodo/cli/contracts"
+	"github.com/zerpto/ponodo/contracts"
 	"os"
 
 	"github.com/spf13/cobra"
-
-	"github.com/zerpto/ponodo/contracts"
 )
 
 type Cli struct {
@@ -29,7 +29,7 @@ func (cli *Cli) SetRootCommand(cmd *cobra.Command) {
 	cli.Command = cmd
 }
 
-func (cli *Cli) AddCommand(f func(app contracts.AppContract) contracts.CommandContract) {
+func (cli *Cli) AddCommand(f func(app contracts.AppContract) clicontracts.CommandContract) {
 	rootCmd := cli.Command
 
 	command := f(cli.App)
@@ -52,8 +52,8 @@ func NewCli(app contracts.AppContract) *Cli {
 
 	config := cli.App.GetConfigLoader().Config
 	var rootCmd = &cobra.Command{
-		Use:   config.App,
-		Short: fmt.Sprintf("%s Service", config.App),
+		Use:   config.GetApp(),
+		Short: fmt.Sprintf("%s Service", config.GetApp()),
 	}
 	cli.SetRootCommand(rootCmd)
 	return cli

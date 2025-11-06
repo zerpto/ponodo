@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/zerpto/ponodo"
+	"github.com/zerpto/ponodo/cli"
 	"net/http"
 	"os/signal"
 	"syscall"
@@ -14,12 +16,11 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/zerpto/ponodo/contracts"
 )
 
 type HttpHandler struct {
-	App           contracts.AppContract
-	RouterSetupFn func(contracts.AppContract)
+	App           ponodo.AppContract
+	RouterSetupFn func(ponodo.AppContract)
 }
 
 func (h *HttpHandler) Short() string {
@@ -92,7 +93,7 @@ func (h *HttpHandler) Use() string {
 	return "http"
 }
 
-func NewHttpHandler(app contracts.AppContract, routerSetupFn func(contracts.AppContract)) contracts.CommandContract {
+func NewHttpHandler(app ponodo.AppContract, routerSetupFn func(ponodo.AppContract)) cli.CommandContract {
 	return &HttpHandler{
 		App:           app,
 		RouterSetupFn: routerSetupFn,

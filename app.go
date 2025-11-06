@@ -4,12 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/cobra"
+	clicontracts "github.com/zerpto/ponodo/cli/contracts"
+	"github.com/zerpto/ponodo/contracts"
+
 	//"github.com/zerpto/template-backend-go/src/routers"
 	"gorm.io/gorm"
 
 	"github.com/zerpto/ponodo/cli"
 	"github.com/zerpto/ponodo/config"
-	"github.com/zerpto/ponodo/contracts"
 )
 
 type App struct {
@@ -18,6 +20,11 @@ type App struct {
 	Command      *cobra.Command
 	Gin          *gin.Engine
 	Validator    *validator.Validate
+}
+
+func (app *App) SetConfigLoader(loader *config.Loader) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (app *App) SetValidator(validate *validator.Validate) {
@@ -41,13 +48,13 @@ func (app *App) SetGin(engine *gin.Engine) {
 }
 
 func (app *App) SetupBaseDependencies() {
-	app.setupConfig()
+	//app.setupConfig()
 	app.setupLogger()
 	//app.setupDatabaseConnection()
 	app.setupModel()
 }
 
-func (app *App) AddCommand(f func(app contracts.AppContract) contracts.CommandContract) {
+func (app *App) AddCommand(f func(app contracts.AppContract) clicontracts.CommandContract) {
 	rootCmd := app.Command
 
 	command := f(app)
@@ -73,17 +80,17 @@ func (app *App) GetConfigLoader() *config.Loader {
 	return app.ConfigLoader
 }
 
-func (app *App) setupConfig() {
-	cfg, err := config.NewLoader()
-	if err != nil {
-		panic(err)
-	}
-	err = cfg.BindTo(&config.Config{})
-	if err != nil {
-		panic(err)
-	}
-	app.ConfigLoader = cfg
-}
+//func (app *App) setupConfig() {
+//	cfg, err := config.NewLoader()
+//	if err != nil {
+//		panic(err)
+//	}
+//	err = cfg.BindTo(&config.Config{}) // todo: move this outside
+//	if err != nil {
+//		panic(err)
+//	}
+//	app.ConfigLoader = cfg
+//}
 
 func (app *App) setupDatabaseConnection() {
 
@@ -95,11 +102,12 @@ func (app *App) setupLogger() {
 
 func (app *App) setupModel() {
 	cfg := app.ConfigLoader.Config
-	host := cfg.DB.Host
-	port := cfg.DB.Port
-	user := cfg.DB.User
-	password := cfg.DB.Password
-	dbName := cfg.DB.Name
+	dbCfg := cfg.GetDb()
+	host := dbCfg.GetHost()
+	port := dbCfg.GetPort()
+	user := dbCfg.GetUser()
+	password := dbCfg.GetPassword()
+	dbName := dbCfg.GetDatabase()
 
 	db := NewGormConnection(host, port, user, password, dbName)
 	app.DB = db
