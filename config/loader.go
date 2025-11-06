@@ -1,12 +1,16 @@
 package config
 
 import (
-	"github.com/zerpto/ponodo/config/contracts"
 	"strings"
+
+	"github.com/zerpto/ponodo/config/contracts"
 
 	"github.com/spf13/viper"
 )
 
+// Loader handles loading and managing application configuration.
+// It reads configuration from environment variables and provides access
+// to the loaded configuration through the ConfigContract interface.
 type Loader struct {
 	Config contracts.ConfigContract
 }
@@ -37,6 +41,9 @@ func (c *Loader) loadFromEnvironmentVariable() error {
 //	return nil
 //}
 
+// NewLoader creates a new configuration loader instance.
+// It initializes the loader and loads configuration from environment variables.
+// Returns an error if the configuration cannot be loaded.
 func NewLoader() (*Loader, error) {
 	loader := Loader{}
 	err := loader.loadFromEnvironmentVariable()

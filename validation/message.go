@@ -2,6 +2,7 @@ package validation
 
 import (
 	"fmt"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/zerpto/ponodo/utils"
 )
@@ -39,7 +40,9 @@ var validationMessages = map[string]string{
 	"password":                "This field must contain at least one uppercase letter, one lowercase letter, one number, and one symbol.",
 }
 
-// GetValidationMessage returns a user-friendly validation error message
+// GetValidationMessage returns a user-friendly validation error message.
+// It formats validation errors by converting field names to snake_case
+// and applying appropriate error messages based on the validation tag.
 func GetValidationMessage(err validator.FieldError) string {
 	fieldName := utils.ToSnakeCase(err.Field())
 	tag := err.Tag()

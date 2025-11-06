@@ -3,16 +3,19 @@ package contracts
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/zerpto/ponodo/cli/contracts"
+	clicontracts "github.com/zerpto/ponodo/cli/contracts"
 	"github.com/zerpto/ponodo/config"
 	"gorm.io/gorm"
 )
 
+// AppContract defines the interface for the main application structure.
+// It provides methods to manage application lifecycle, dependencies, and
+// core services like configuration, database, HTTP server, and validation.
 type AppContract interface {
 	SetupBaseDependencies()
 	Run()
 
-	AddCommand(func(app AppContract) contracts.CommandContract)
+	AddCommand(func(app AppContract) clicontracts.CommandContract)
 
 	SetConfigLoader(*config.Loader)
 	GetConfigLoader() *config.Loader

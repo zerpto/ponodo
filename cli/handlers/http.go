@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	clicontracts "github.com/zerpto/ponodo/cli/contracts"
-	"github.com/zerpto/ponodo/contracts"
 	"net/http"
 	"os/signal"
 	"syscall"
 	"time"
+
+	clicontracts "github.com/zerpto/ponodo/cli/contracts"
+	"github.com/zerpto/ponodo/contracts"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
@@ -18,23 +19,38 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// HttpHandler represents a CLI command handler for running an HTTP server.
+// It manages the HTTP server lifecycle, including startup, graceful shutdown,
+// and router configuration through the provided setup function.
 type HttpHandler struct {
 	App           contracts.AppContract
 	RouterSetupFn func(contracts.AppContract)
 }
 
+// Short returns a brief description of the HTTP command.
+// This description is displayed in the command help output
+// and provides a quick overview of the command's purpose.
 func (h *HttpHandler) Short() string {
 	return "Run http server to expose api endpoints."
 }
 
+// Long returns a detailed description of the HTTP command.
+// This description is displayed in the extended help output
+// and provides comprehensive information about the command.
 func (h *HttpHandler) Long() string {
 	return "Run http server to expose api endpoints."
 }
 
+// Example returns an example usage string for the HTTP command.
+// This example demonstrates how to use the command with proper
+// syntax and arguments.
 func (h *HttpHandler) Example() string {
 	return `zerpto http --port 8080`
 }
 
+// Run executes the HTTP server command. It initializes the Gin router,
+// sets up graceful shutdown handling, and starts the HTTP server on
+// the configured port with proper signal handling.
 func (h *HttpHandler) Run(cmd *cobra.Command, args []string) {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
@@ -89,10 +105,16 @@ func (h *HttpHandler) Run(cmd *cobra.Command, args []string) {
 	log.Info().Msg("Server exiting")
 }
 
+// Use returns the command name used to invoke this handler.
+// This is the string that users type to execute the command
+// from the command line interface.
 func (h *HttpHandler) Use() string {
 	return "http"
 }
 
+// NewHttpHandler creates a new HTTP command handler instance.
+// It accepts the application contract and a router setup function
+// that will be called to configure the HTTP routes and middleware.
 func NewHttpHandler(app contracts.AppContract, routerSetupFn func(contracts.AppContract)) clicontracts.CommandContract {
 	return &HttpHandler{
 		App:           app,

@@ -5,6 +5,9 @@ import (
 	"strings"
 )
 
+// ToSnakeCase converts a camelCase or PascalCase string to snake_case.
+// It inserts underscores before uppercase letters that follow lowercase
+// letters or numbers, then converts the entire string to lowercase.
 func ToSnakeCase(str string) string {
 	// Handle empty string
 	if str == "" {
