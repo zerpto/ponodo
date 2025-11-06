@@ -13,9 +13,11 @@ import (
 
 	"github.com/zerpto/ponodo/cli"
 	clicontracts "github.com/zerpto/ponodo/cli/contracts"
+	climocks "github.com/zerpto/ponodo/cli/contracts/mocks"
 	"github.com/zerpto/ponodo/config"
+	configmocks "github.com/zerpto/ponodo/config/contracts/mocks"
 	"github.com/zerpto/ponodo/contracts"
-	"github.com/zerpto/ponodo/mocks"
+	"github.com/zerpto/ponodo/contracts/mocks"
 )
 
 func TestNewApp(t *testing.T) {
@@ -81,7 +83,7 @@ func TestApp_AddCommand(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockCommand := mocks.NewMockCommandContract(ctrl)
+	mockCommand := climocks.NewMockCommandContract(ctrl)
 	app := &App{
 		Command: &cobra.Command{
 			Use: "testapp",
@@ -108,7 +110,7 @@ func TestApp_Run(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockApp := mocks.NewMockAppContract(ctrl)
-	mockConfigLoader := mocks.NewMockConfigContract(ctrl)
+	mockConfigLoader := configmocks.NewMockConfigContract(ctrl)
 
 	mockApp.EXPECT().GetConfigLoader().Return(&config.Loader{
 		Config: mockConfigLoader,

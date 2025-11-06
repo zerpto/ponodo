@@ -10,8 +10,9 @@ import (
 	"go.uber.org/mock/gomock"
 
 	"github.com/zerpto/ponodo/config"
+	configmocks "github.com/zerpto/ponodo/config/contracts/mocks"
 	"github.com/zerpto/ponodo/contracts"
-	"github.com/zerpto/ponodo/mocks"
+	"github.com/zerpto/ponodo/contracts/mocks"
 )
 
 func TestHttpHandler_Short(t *testing.T) {
@@ -71,7 +72,7 @@ func TestHttpHandler_Run(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockApp := mocks.NewMockAppContract(ctrl)
-	mockConfigLoader := mocks.NewMockConfigContract(ctrl)
+	mockConfigLoader := configmocks.NewMockConfigContract(ctrl)
 
 	gin.SetMode(gin.TestMode)
 
@@ -111,11 +112,10 @@ func TestNewHttpHandler(t *testing.T) {
 	handlerContract := NewHttpHandler(mockApp, setupFn)
 
 	require.NotNil(t, handlerContract)
-	
+
 	// Type assert to HttpHandler to access fields
 	handler, ok := handlerContract.(*HttpHandler)
 	require.True(t, ok, "NewHttpHandler should return *HttpHandler")
 	assert.Equal(t, mockApp, handler.App)
 	assert.NotNil(t, handler.RouterSetupFn)
 }
-

@@ -8,10 +8,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/mock/gomock"
 
-	"github.com/zerpto/ponodo/config"
 	clicontracts "github.com/zerpto/ponodo/cli/contracts"
+	climocks "github.com/zerpto/ponodo/cli/contracts/mocks"
+	"github.com/zerpto/ponodo/config"
+	configmocks "github.com/zerpto/ponodo/config/contracts/mocks"
 	"github.com/zerpto/ponodo/contracts"
-	"github.com/zerpto/ponodo/mocks"
+	"github.com/zerpto/ponodo/contracts/mocks"
 )
 
 func TestNewCli(t *testing.T) {
@@ -19,7 +21,7 @@ func TestNewCli(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockApp := mocks.NewMockAppContract(ctrl)
-	mockConfigLoader := mocks.NewMockConfigContract(ctrl)
+	mockConfigLoader := configmocks.NewMockConfigContract(ctrl)
 
 	mockApp.EXPECT().GetConfigLoader().Return(&config.Loader{
 		Config: mockConfigLoader,
@@ -55,7 +57,7 @@ func TestCli_AddCommand(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockApp := mocks.NewMockAppContract(ctrl)
-	mockCommand := mocks.NewMockCommandContract(ctrl)
+	mockCommand := climocks.NewMockCommandContract(ctrl)
 
 	cli := &Cli{
 		App: mockApp,
@@ -97,4 +99,3 @@ func TestCli_Run(t *testing.T) {
 	// Note: We can't fully test os.Exit behavior, but we can test the structure
 	assert.NotNil(t, cli.Command)
 }
-

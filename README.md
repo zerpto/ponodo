@@ -180,10 +180,47 @@ type User struct {
 db.Create(&User{Name: "John"})
 ```
 
+## Development
+
+### Running Tests
+
+```bash
+# Run all tests
+go test ./...
+
+# Run tests with coverage
+go test ./... -cover
+
+# Generate coverage report
+go test ./... -coverprofile=coverage.out
+go tool cover -html=coverage.out
+```
+
+### Regenerating Mocks
+
+The project uses [gomock](https://github.com/golang/mock) for generating test mocks. Mock generation directives are defined at the top of each interface file using `//go:generate` comments.
+
+To regenerate all mocks:
+
+```bash
+go generate ./...
+```
+
+This will regenerate mocks for:
+- `contracts/AppContract` → `mocks/mock_app_contract.go`
+- `cli/contracts/CommandContract` → `mocks/mock_command_contract.go`
+- `config/contracts/ConfigContract` and `DbConfigContract` → `mocks/mock_config_contract.go`
+
+**Prerequisites for mock generation:**
+```bash
+go install go.uber.org/mock/mockgen@latest
+```
+
 ## Requirements
 
 - Go 1.24.0 or higher
 - PostgreSQL (for database features)
+- mockgen (for generating test mocks during development)
 
 ## License
 

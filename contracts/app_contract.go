@@ -11,6 +11,8 @@ import (
 // AppContract defines the interface for the main application structure.
 // It provides methods to manage application lifecycle, dependencies, and
 // core services like configuration, database, HTTP server, and validation.
+//
+//go:generate mockgen -source=$GOFILE -destination=./mocks/mock_app_contract.go -package=mocks
 type AppContract interface {
 	SetupBaseDependencies()
 	Run()
